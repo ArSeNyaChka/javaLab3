@@ -2,7 +2,12 @@ package geometry2d;
 
 import exceptions.IncorrectSizeException;
 
-public class Rectangle implements Figure {
+import java.io.Serial;
+import java.io.Serializable;
+
+public class Rectangle implements Figure, Serializable {
+    @Serial
+    private static final long serialVersionUID = 67;
     private final double length, width;
 
     public Rectangle(double length, double width) {
@@ -26,5 +31,10 @@ public class Rectangle implements Figure {
     @Override
     public String toString() {
         return String.format("Type: Rectangle, Length: %f, Width: %f, Area: %f, Perimeter: %f", length, width, area(), perimeter());
+    }
+
+    @Override
+    public String toSaveString() {
+        return String.format("Rectangle %f %f", length, width);
     }
 }

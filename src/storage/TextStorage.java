@@ -8,25 +8,23 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
 public class TextStorage implements Storage {
-
     private Figure parseFigure(String str) throws ClassNotFoundException, IOException {
-        String[] words = str.replace(",", "").split("\\s+");
+        String[] words = str.split("\\s+");
         try {
-            if (Objects.equals(words[1], "Circle"))
-                return new Circle(Double.parseDouble(words[3]));
-            if (Objects.equals(words[1], "Rectangle"))
-                return new Rectangle(Double.parseDouble(words[3]), Double.parseDouble(words[5]));
+            if (Objects.equals(words[0], "Circle"))
+                return new Circle(Double.parseDouble(words[1]));
+            if (Objects.equals(words[0], "Rectangle"))
+                return new Rectangle(Double.parseDouble(words[1]), Double.parseDouble(words[2]));
         } catch (IndexOutOfBoundsException e) {
-            throw new IOException();
+            throw new IOException("Incorrect save format: " + str);
         }
-        throw new ClassNotFoundException();
+        throw new ClassNotFoundException("Netu Takogo klassa: " + words[0]);
     }
 
     @Override
@@ -35,7 +33,10 @@ public class TextStorage implements Storage {
 
         try (Scanner scanner = new Scanner(path, StandardCharsets.UTF_8)) {
             while (scanner.hasNextLine()) {
-                figures.add(parseFigure(scanner.nextLine()));
+                String line = scanner.nextLine().strip();
+                if (Objects.equals(line, "")) continue;
+
+                figures.add(parseFigure(line));
             }
 
             IOException readError = scanner.ioException();
@@ -48,10 +49,12 @@ public class TextStorage implements Storage {
 
     @Override
     public void write(Path path, List<Figure> figures) throws IOException {
-        Files.write(path, "".getBytes());  // Clear file
+        StringBuilder content = new StringBuilder();
 
         for (Figure figure : figures) {
-            Files.writeString(path, figure.toString(), StandardCharsets.UTF_8, StandardOpenOption.APPEND);
+            content.append(figure.toSaveString()).append("\n");
         }
+
+        Files.writeString(path, content, StandardCharsets.UTF_8);
     }
 }

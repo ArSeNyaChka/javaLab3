@@ -2,7 +2,12 @@ package geometry2d;
 
 import exceptions.IncorrectSizeException;
 
-public class Circle implements Figure {
+import java.io.Serial;
+import java.io.Serializable;
+
+public class Circle implements Figure, Serializable {
+    @Serial
+    private static final long serialVersionUID = 67;
     private final double radius;
 
     public Circle(double radius) {
@@ -25,5 +30,10 @@ public class Circle implements Figure {
     @Override
     public String toString() {
         return String.format("Type: Circle, Radius: %f, Area: %f, Perimeter: %f", radius, area(), perimeter());
+    }
+
+    @Override
+    public String toSaveString() {
+        return String.format("Circle %f", radius);
     }
 }
