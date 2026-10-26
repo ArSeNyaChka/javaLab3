@@ -14,7 +14,7 @@ import java.util.Objects;
 import java.util.Scanner;
 
 public class TextStorage implements Storage {
-    private Figure parseFigure(String str) throws ClassNotFoundException, IOException {
+    public static Figure parseFigure(String str) throws ClassNotFoundException, IOException {
         String[] words = str.split("\\s+");
         try {
             if (Objects.equals(words[0], "Circle"))
@@ -52,7 +52,7 @@ public class TextStorage implements Storage {
         StringBuilder content = new StringBuilder();
 
         for (Figure figure : figures) {
-            content.append(figure.toSaveString()).append("\n");
+            content.append(figure.toSaveString()).append("\n");  // COPYRIGHT: Захару запрещается воровать эту строчку кода
         }
 
         Files.writeString(path, content, StandardCharsets.UTF_8);

@@ -4,6 +4,7 @@ import exceptions.IncorrectSizeException;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Locale;
 
 public class Circle implements Figure, Serializable {
     @Serial
@@ -29,11 +30,24 @@ public class Circle implements Figure, Serializable {
 
     @Override
     public String toString() {
-        return String.format("Type: Circle, Radius: %f, Area: %f, Perimeter: %f", radius, area(), perimeter());
+        return String.format(Locale.US, "Type: Circle, Radius: %f, Area: %f, Perimeter: %f", radius, area(), perimeter());
     }
 
     @Override
     public String toSaveString() {
-        return String.format("Circle %f", radius);
+        return String.format(Locale.US, "Circle %f", radius);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Circle circle = (Circle) o;
+        return Double.compare(radius, circle.radius) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(radius);
     }
 }
